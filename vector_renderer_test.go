@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/blend/go-sdk/assert"
-	"github.com/wcharczuk/go-chart/drawing"
+	"github.com/regorov/go-chart/drawing"
 )
 
 func TestVectorRendererPath(t *testing.T) {
@@ -95,8 +95,8 @@ func TestCanvasCustomInlineStylesheet(t *testing.T) {
 	b := strings.Builder{}
 
 	canvas := &canvas{
-		w:     &b,
-		css:   ".background { fill: red }",
+		w:   &b,
+		css: ".background { fill: red }",
 	}
 
 	canvas.Start(200, 200)

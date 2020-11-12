@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/wcharczuk/go-chart"
+	"github.com/regorov/go-chart"
 )
 
 func random(min, max float64) float64 {

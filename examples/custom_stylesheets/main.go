@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/wcharczuk/go-chart"
+	"github.com/regorov/go-chart"
 )
 
 const style = "svg .background { fill: white; }" +
