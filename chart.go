@@ -73,24 +73,38 @@ func (c Chart) GetHeight() int {
 
 // Render renders the chart with the given renderer to the given io.Writer.
 func (c Chart) Render(rp RendererProvider, w io.Writer) error {
+	r, err := c.preRender(rp)
+	if err != nil {
+		return err
+	}
+
+	return r.Save(w)
+}
+
+// PreRender renders chart and returns Renderer for further manipulation.
+func (c Chart) PreRender(rp RendererProvider) (Renderer, error) {
+	return c.preRender(rp)
+}
+
+func (c Chart) preRender(rp RendererProvider) (Renderer, error) {
 	if len(c.Series) == 0 {
-		return errors.New("please provide at least one series")
+		return nil, errors.New("please provide at least one series")
 	}
 	if err := c.checkHasVisibleSeries(); err != nil {
-		return err
+		return nil, err
 	}
 
 	c.YAxisSecondary.AxisType = YAxisSecondary
 
 	r, err := rp(c.GetWidth(), c.GetHeight())
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if c.Font == nil {
 		defaultFont, err := GetDefaultFont()
 		if err != nil {
-			return err
+			return nil, err
 		}
 		c.defaultFont = defaultFont
 	}
@@ -109,8 +123,7 @@ func (c Chart) Render(rp RendererProvider, w io.Writer) error {
 
 	err = c.checkRanges(xr, yr, yra)
 	if err != nil {
-		r.Save(w)
-		return err
+		return nil, err
 	}
 
 	if c.hasAxes() {
@@ -146,7 +159,7 @@ func (c Chart) Render(rp RendererProvider, w io.Writer) error {
 		a(r, canvasBox, c.styleDefaultsElements())
 	}
 
-	return r.Save(w)
+	return r, nil
 }
 
 func (c Chart) checkHasVisibleSeries() error {
